@@ -1,0 +1,67 @@
+networks:
+  inception-net:
+   name: inception-net
+   driver: bridge
+
+volumes:
+  mdb:
+   driver: local
+   name: mdb
+   driver_opts:
+      type: 'none'
+      o: bind
+      device: ./data/mysql
+  wp:
+   driver: local
+   name: wp
+   driver_opts:
+      type: 'none'
+      o: bind
+      device: ./data/wordpress
+
+services:
+  mariadb:
+    build: ./requirements/mariadb
+    image: mariadb
+    container_name: mariadb
+    volumes:
+      - mdb:/var/lib/mysql
+    expose:
+        - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty4life
+      MYSQL_DATABASE: wp
+      MYSQL_USER: hchua
+      MYSQL_PASSWORD: qwerty123
+    networks:
+      - inception-net
+    restart: on-failure
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpress
+    container_name: wordpress
+    volumes:
+      - wp:/var/www/html
+    depends_on:
+      - mariadb
+    env_file:
+      - .env
+    networks:
+      - inception-net
+    expose:
+      - "9000"
+    restart: on-failure
+  nginx:
+    build: ./requirements/nginx
+    image: nginx
+    container_name: nginx
+    volumes:
+      - wp:/var/www/html
+    ports:
+      - "443:443"
+    networks:
+      - inception-net
+    depends_on:
+      - wordpress
+    restart: on-failure
+
