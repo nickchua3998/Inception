@@ -1,5 +1,5 @@
 NAME = inception
-DOCKER_COMPOSE = docker compose -f ./srcs/docker-compose.yml
+DOCKER_COMPOSE = docker-compose -f ./srcs/docker-compose.yml
 DOCKER = docker
 
 all:
