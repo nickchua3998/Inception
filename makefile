@@ -35,8 +35,6 @@ clean:
 		docker network rm "inception-net";
 
 fclean:	clean
-		rm -rf ./data/mysql
-		rm -rf ./data/wordpress
 		${DOCKER} system prune -f
 
 .PHONY:	all up stop start down logs status re clean fclean
