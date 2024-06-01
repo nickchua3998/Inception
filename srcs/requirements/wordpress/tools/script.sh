@@ -1,5 +1,8 @@
 #!bin/bash
 
+# wait for maria_db to be ready
+sleep 15
+
 # Install Wordpress
 if [ ! -f /var/www/html/wp-config.php ]; then
     wp config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} \
