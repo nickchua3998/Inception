@@ -1,8 +1,5 @@
 #!bin/bash
 
-# wait for maria_db to be ready
-sleep 15
-
 # Install Wordpress
 if [ ! -f /var/www/html/wp-config.php ]; then
     wp config create --dbname=${MYSQL_DATABASE} --dbuser=${MYSQL_USER} \
@@ -11,13 +8,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
         --admin_password=${MYSQL_PASSWORD} --admin_email=${MYSQL_EMAIL} --allow-root
     wp user create ${MYSQL_USER} --role=author --user_pass=${MYSQL_PASSWORD} --allow-root
     chmod 777 /var/www/html/wp-content
-
-    # install theme
-    wp theme install twentyfifteen
-    wp theme activate twentyfifteen
-    wp theme update twentyfifteen
     
 fi
-
 
 /usr/sbin/php-fpm7.3 -F
